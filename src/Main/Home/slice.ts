@@ -1,13 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+interface Package {
+  _id: string;
+  // Add other properties as needed
+}
+
+type Review = unknown;
+
 export interface HomeState {
-  data: any;
+  data: Package[] | null;
   loadingPck: boolean;
   error: string | null; 
   ReviewsLoading: boolean;
-  ReviewsError: any; 
-  Reviewsdata: any;   
+  ReviewsError: string | null; 
+  Reviewsdata: Review[] | null;   
 }
 
 const initialState: HomeState = {
@@ -28,9 +35,9 @@ const homeSlice = createSlice({
       state.error = null; 
       state.data = null; 
     },
-    fetchHomeDataSuccess: (state, action: PayloadAction<any>) => {
+    fetchHomeDataSuccess: (state, action: PayloadAction<{ data: Package[] }>) => {
       state.loadingPck = false;
-      state.data = action.payload;
+      state.data = action.payload.data;
       state.error = null;
     },
     fetchHomeDataFailure: (state, action: PayloadAction<string>) => {
@@ -43,7 +50,7 @@ const homeSlice = createSlice({
       state.ReviewsError = null; 
       state.Reviewsdata = null; 
     },
-    fetchReviewsSuccess: (state, action: PayloadAction<any>) => {
+    fetchReviewsSuccess: (state, action: PayloadAction<{ reviews: Review[] }>) => {
       state.ReviewsLoading = false;
       state.Reviewsdata = action.payload.reviews;
       state.ReviewsError = null;
